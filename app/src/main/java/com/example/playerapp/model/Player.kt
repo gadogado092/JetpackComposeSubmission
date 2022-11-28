@@ -1,7 +1,7 @@
 package com.example.playerapp.model
 
 data class Player(
-    val id: String,
+    val id: Int,
     val name: String,
     val birthDate: String,
     val tall: String,

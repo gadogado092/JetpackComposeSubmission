@@ -3,7 +3,6 @@ package com.example.playerapp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -14,13 +13,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.playerapp.ui.navigation.NavigationItem
 import com.example.playerapp.ui.navigation.Screen
 import com.example.playerapp.ui.screen.about.AboutScreen
+import com.example.playerapp.ui.screen.detail.DetailScreen
 import com.example.playerapp.ui.screen.favorite.FavoriteScreen
 import com.example.playerapp.ui.screen.home.HomeScreen
 import com.example.playerapp.ui.theme.PlayerAppTheme
@@ -30,9 +32,14 @@ fun PlayerApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         bottomBar = {
-            BottomBar(navController)
+            if (currentRoute != Screen.Detail.route) {
+                BottomBar(navController)
+            }
         },
         modifier = modifier
     ) { innerPadding ->
@@ -42,13 +49,26 @@ fun PlayerApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateToDetail = { playerId ->
+                        navController.navigate(Screen.Detail.createRoute(playerId))
+                    }
+                )
             }
             composable(Screen.Favorite.route) {
                 FavoriteScreen()
             }
             composable(Screen.About.route) {
                 AboutScreen()
+            }
+            composable(
+                Screen.Detail.route,
+                arguments = listOf(navArgument("playerId") { type = NavType.IntType }),
+            ) {
+                val id = it.arguments?.getInt("playerId") ?: -1
+                DetailScreen(
+                    playerId = id,
+                )
             }
         }
     }

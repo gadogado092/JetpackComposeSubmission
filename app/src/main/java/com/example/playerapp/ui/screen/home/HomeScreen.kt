@@ -1,5 +1,6 @@
 package com.example.playerapp.ui.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,6 +24,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
+    navigateToDetail: (Int) -> Unit,
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -33,7 +35,8 @@ fun HomeScreen(
             is UiState.Success -> {
                 HomeContent(
                     players = uiState.data,
-                    modifier = modifier
+                    modifier = modifier,
+                    navigateToDetail = navigateToDetail,
                 )
             }
             is UiState.Error -> {
@@ -44,12 +47,23 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeContent(players: List<Player>, modifier: Modifier) {
+fun HomeContent(
+    players: List<Player>,
+    modifier: Modifier,
+    navigateToDetail: (Int) -> Unit,
+) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(players) { data ->
-            PlayerItem(name = data.name, photoUrl = data.photoUrl, data.position, data.country)
+            PlayerItem(
+                name = data.name,
+                photoUrl = data.photoUrl,
+                data.position, data.country,
+                modifier = Modifier.clickable {
+                    navigateToDetail(data.id)
+                }
+            )
         }
     }
 }

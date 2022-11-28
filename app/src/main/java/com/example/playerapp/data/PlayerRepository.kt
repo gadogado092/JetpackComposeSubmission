@@ -21,6 +21,12 @@ class PlayerRepository {
         return flowOf(players)
     }
 
+    fun getPlayerById(playerId: Int): Player {
+        return players.first {
+            it.id == playerId
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: PlayerRepository? = null

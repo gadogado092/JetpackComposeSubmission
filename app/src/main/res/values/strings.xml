@@ -4,5 +4,6 @@
     <string name="menu_favorite">Favorite</string>
     <string name="menu_about">About</string>
     <string name="please_wait">Please Wait</string>
+    <string name="back">Back</string>
     <string name="error_message">Something Wrong %s</string>
 </resources>

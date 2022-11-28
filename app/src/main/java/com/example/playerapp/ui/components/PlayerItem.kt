@@ -26,7 +26,7 @@ fun PlayerItem(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { }
+        modifier = modifier
     ) {
         AsyncImage(
             model = photoUrl,
