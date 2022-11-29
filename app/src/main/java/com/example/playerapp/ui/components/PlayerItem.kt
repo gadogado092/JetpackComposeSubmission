@@ -1,6 +1,5 @@
 package com.example.playerapp.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -63,6 +62,6 @@ fun PlayerItem(
 @Composable
 fun PlayerItemPreview() {
     PlayerAppTheme {
-        PlayerItem("Tes", "", "striker","")
+        PlayerItem("Tes", "", "striker", "")
     }
 }

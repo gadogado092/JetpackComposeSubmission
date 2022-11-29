@@ -3,6 +3,7 @@ package com.example.playerapp.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.playerapp.data.PlayerRepository
+import com.example.playerapp.ui.screen.about.AboutViewModel
 import com.example.playerapp.ui.screen.detail.DetailViewModel
 import com.example.playerapp.ui.screen.favorite.FavoriteViewModel
 import com.example.playerapp.ui.screen.home.HomeViewModel
@@ -20,6 +21,9 @@ class ViewModelFactory(private val repository: PlayerRepository) :
         }
         else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
             return FavoriteViewModel(repository) as T
+        }
+        else if (modelClass.isAssignableFrom(AboutViewModel::class.java)) {
+            return AboutViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

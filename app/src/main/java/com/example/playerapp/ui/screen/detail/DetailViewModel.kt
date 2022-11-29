@@ -20,7 +20,6 @@ class DetailViewModel(
 
     fun getPlayerById(playerId: Int) {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
             _uiState.value = UiState.Success(repository.getPlayerById(playerId))
         }
     }

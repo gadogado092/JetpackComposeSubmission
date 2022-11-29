@@ -1,6 +1,6 @@
 package com.example.playerapp.data
 
-import com.example.playerapp.model.FakePlayerDataSource
+import com.example.playerapp.model.About
 import com.example.playerapp.model.Player
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -35,6 +35,14 @@ class PlayerRepository {
         return players.first {
             it.id == playerId
         }
+    }
+
+    fun getAbout(): About {
+        return About(
+            name = "Rabiuldien Amat",
+            photoUrl = "https://pbs.twimg.com/profile_images/439919384291598337/w_I1oArt_400x400.jpeg",
+            email = "gadogado092@gmail.com"
+        )
     }
 
     fun updateStatusFavorite(playerId: Int, status: Boolean): Flow<Boolean> {

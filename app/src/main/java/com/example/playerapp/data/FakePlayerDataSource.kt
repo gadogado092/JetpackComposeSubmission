@@ -1,4 +1,6 @@
-package com.example.playerapp.model
+package com.example.playerapp.data
+
+import com.example.playerapp.model.Player
 
 object FakePlayerDataSource {
     val dummyPlayers = listOf(
