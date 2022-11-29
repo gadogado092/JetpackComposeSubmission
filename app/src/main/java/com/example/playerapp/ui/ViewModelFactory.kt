@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.playerapp.data.PlayerRepository
 import com.example.playerapp.ui.screen.detail.DetailViewModel
+import com.example.playerapp.ui.screen.favorite.FavoriteViewModel
 import com.example.playerapp.ui.screen.home.HomeViewModel
 
 class ViewModelFactory(private val repository: PlayerRepository) :
@@ -17,9 +18,9 @@ class ViewModelFactory(private val repository: PlayerRepository) :
         else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(repository) as T
         }
-//        else if (modelClass.isAssignableFrom(CartViewModel::class.java)) {
-//            return CartViewModel(repository) as T
-//        }
+        else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
+            return FavoriteViewModel(repository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 }

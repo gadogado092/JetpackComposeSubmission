@@ -25,4 +25,10 @@ class DetailViewModel(
         }
     }
 
+    fun updateStatusFavorite(playerId: Int, status: Boolean) {
+        viewModelScope.launch {
+            repository.updateStatusFavorite(playerId, status)
+        }
+    }
+
 }

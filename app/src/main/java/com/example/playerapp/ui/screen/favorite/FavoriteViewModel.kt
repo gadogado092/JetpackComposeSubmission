@@ -19,9 +19,9 @@ class FavoriteViewModel(
     val uiState: StateFlow<UiState<List<Player>>>
         get() = _uiState
 
-    fun getAllPlayers() {
+    fun getFavoritePlayers() {
         viewModelScope.launch {
-            repository.getAllPlayer()
+            repository.getFavoritePlayers()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
                 }

@@ -56,7 +56,11 @@ fun PlayerApp(
                 )
             }
             composable(Screen.Favorite.route) {
-                FavoriteScreen()
+                FavoriteScreen(
+                    navigateToDetail = { playerId ->
+                        navController.navigate(Screen.Detail.createRoute(playerId))
+                    }
+                )
             }
             composable(Screen.About.route) {
                 AboutScreen()
@@ -68,6 +72,9 @@ fun PlayerApp(
                 val id = it.arguments?.getInt("playerId") ?: -1
                 DetailScreen(
                     playerId = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
                 )
             }
         }

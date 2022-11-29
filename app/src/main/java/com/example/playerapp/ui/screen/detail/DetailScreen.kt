@@ -1,15 +1,18 @@
 package com.example.playerapp.ui.screen.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +40,7 @@ fun DetailScreen(
             Injection.provideRepository()
         )
     ),
+    navigateBack: () -> Unit,
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -54,7 +58,13 @@ fun DetailScreen(
                     photoUrl = data.photoUrl,
                     club = data.club,
                     country = data.country,
-                    isFavourite = data.isFavourite
+                    isFavourite = data.isFavourite,
+                    onFavoriteClick = {
+                        viewModel.updateStatusFavorite(data.id, !data.isFavourite)
+                    },
+                    onBackClick = {
+                        navigateBack()
+                    }
                 )
             }
             is UiState.Error -> {
@@ -74,11 +84,15 @@ fun DetailContent(
     country: String,
     isFavourite: Boolean,
     photoUrl: String,
+    onFavoriteClick: (status: Boolean) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    var statusFavorite by rememberSaveable { mutableStateOf(isFavourite) }
+
     Column(modifier = modifier) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
@@ -86,16 +100,26 @@ fun DetailContent(
                 contentDescription = stringResource(R.string.back),
                 modifier = Modifier
                     .padding(16.dp)
-//                    .clickable { onBackClick() }
+                    .clickable { onBackClick() }
             )
-            if (isFavourite) {
+            Text(
+                text = stringResource(id = R.string.detail_player),
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .weight(1F)
+                    .align(Alignment.CenterVertically),
+            )
+            if (statusFavorite) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     tint = Color.Red,
                     contentDescription = stringResource(R.string.back),
                     modifier = Modifier
                         .padding(16.dp)
-//                    .clickable { onBackClick() }
+                        .clickable {
+                            statusFavorite = false
+                            onFavoriteClick(false)
+                        }
                 )
             } else {
                 Icon(
@@ -103,34 +127,42 @@ fun DetailContent(
                     contentDescription = stringResource(R.string.back),
                     modifier = Modifier
                         .padding(16.dp)
-//                    .clickable { onBackClick() }
+                        .clickable {
+                            statusFavorite = true
+                            onFavoriteClick(true)
+                        }
                 )
             }
         }
-        AsyncImage(
-            model = photoUrl,
-            contentDescription = null,
+        Column(
             modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .height(400.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(GreyLight)
-        )
-        Text(
-            text = name,
-            fontWeight = FontWeight.Medium,
-            fontSize = 22.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 8.dp),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        ItemDetail(title = "Tanggal Lahir", value = birthDate)
-        ItemDetail(title = "Tinggi Badan", value = tall)
-        ItemDetail(title = "Posisi", value = position)
-        ItemDetail(title = "Club", value = club)
-        ItemDetail(title = "Country", value = country)
+                .verticalScroll(rememberScrollState())
+                .weight(1f)
+        ) {
+            AsyncImage(
+                model = photoUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .background(GreyLight)
+            )
+            Text(
+                text = name,
+                fontWeight = FontWeight.Medium,
+                fontSize = 22.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 8.dp),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            ItemDetail(title = "Tanggal Lahir", value = birthDate)
+            ItemDetail(title = "Tinggi Badan", value = tall)
+            ItemDetail(title = "Posisi", value = position)
+            ItemDetail(title = "Club", value = club)
+            ItemDetail(title = "Country", value = country)
+        }
     }
 }
 
@@ -163,7 +195,9 @@ fun DetailContentPreview() {
             club = "Paris Saint-Germain",
             country = "Argentina",
             isFavourite = true,
-            photoUrl = ""
+            photoUrl = "",
+            onFavoriteClick = {},
+            onBackClick = {}
         )
     }
 }

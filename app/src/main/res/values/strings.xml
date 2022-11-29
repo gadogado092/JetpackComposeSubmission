@@ -6,4 +6,6 @@
     <string name="please_wait">Please Wait</string>
     <string name="back">Back</string>
     <string name="error_message">Something Wrong %s</string>
+    <string name="data_empty">Data %s Empty</string>
+    <string name="detail_player">Detail Player</string>
 </resources>
